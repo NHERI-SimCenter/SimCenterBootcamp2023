@@ -71,7 +71,7 @@ To start you off, we have provided a file **transformStress.c** in **/assignment
 Problem 3: Compute PI numerically
 _________________________________
 
-The figure below shows an method to compute **pi** by numerical integration. We would like you to implement that computation in a **C** program. The program should take as input an integer value specyfying the number of intervals.
+The figure below shows an method to compute **pi** by numerical integration. We would like you to implement that computation in a **C** program. The program should take as **input** an **integer value specyfying the number of intervals**.
 
    .. figure:: figures/pi.png
            :align: center

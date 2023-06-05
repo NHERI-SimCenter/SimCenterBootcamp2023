@@ -301,7 +301,7 @@
 </div>
 <div class="section" id="problem-3-compute-pi-numerically">
 <h3>Problem 3: Compute PI numerically<a class="headerlink" href="#problem-3-compute-pi-numerically" title="Permalink to this headline">¶</a></h3>
-<p>The figure below shows an method to compute <strong>pi</strong> by numerical integration. We would like you to implement that computation in a <strong>C</strong> program. The program should take as input an integer value specyfying the number of intervals.</p>
+<p>The figure below shows an method to compute <strong>pi</strong> by numerical integration. We would like you to implement that computation in a <strong>C</strong> program. The program should take as <strong>input</strong> an <strong>integer value specyfying the number of intervals</strong>.</p>
 <blockquote>
 <div><div class="align-center figure" id="id1">
 <img alt="../_images/pi.png" src="../_images/pi.png" />
@@ -313,13 +313,21 @@
 <span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
 <span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
 <span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos"> 6</span>
-<span class="linenos"> 7</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">pi</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="linenos"> 8</span><span class="w">  </span>
-<span class="linenos"> 9</span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;PI = %16.14f, diff(%16.14f)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">pi</span><span class="p">,</span><span class="w"> </span><span class="n">fabs</span><span class="p">(</span><span class="n">pi</span><span class="o">-</span><span class="n">M_PI</span><span class="p">));</span>
-<span class="linenos">10</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="linenos">11</span><span class="p">}</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Usage: appName numSteps</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">exit</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span>
+<span class="linenos">11</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">numSteps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="linenos">14</span><span class="w">  </span>
+<span class="linenos">15</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">pi</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">16</span><span class="w">  </span>
+<span class="linenos">17</span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;PI = %16.14f, diff(%16.14f)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">pi</span><span class="p">,</span><span class="w"> </span><span class="n">fabs</span><span class="p">(</span><span class="n">pi</span><span class="o">-</span><span class="n">M_PI</span><span class="p">));</span>
+<span class="linenos">18</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">19</span><span class="p">}</span>
 </pre></div>
 </div>
 <div class="admonition note">
