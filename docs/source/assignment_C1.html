@@ -193,10 +193,10 @@
             
   <div class="section" id="c-assignments-day-1">
 <h1>C: Assignments Day 1<a class="headerlink" href="#c-assignments-day-1" title="Permalink to this headline">¶</a></h1>
-<p>Today we have three problems for you to tackle. Two are familiar and you performed them in Python as part of day 1 exercises and assignments. The third <strong>pi</strong> is new.</p>
+<p>Today we have three problems for you to tackle.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>In the Python part of the bootcamp pretty much everything was set up for you with Jupyter notebooks that were supplied. In this part of the bootcamp we will only be providing you with ONE example file. You will in a hurry have to learn some <strong>emacs</strong> and basic <strong>git</strong> and <strong>linux</strong> commands. The sidebar on the left contains some basic instruction on these (enough to get you through this part of the bootcamp). The training wheels have been removed!</p>
+<p>In this part of the bootcamp we will only be providing you with a minimal number of example files. You will in a hurry have to learn some <strong>emacs</strong>, basic <strong>git</strong> and <strong>linux</strong> commands. The sidebar on the left contains some basic instruction on these (enough to get you through this part of the bootcamp). The training wheels have been removed!</p>
 </div>
 <div class="section" id="problem-1-solve-the-quadratic">
 <h2>Problem 1: Solve the Quadratic<a class="headerlink" href="#problem-1-solve-the-quadratic" title="Permalink to this headline">¶</a></h2>
@@ -207,34 +207,39 @@
 <div class="math notranslate nohighlight">
 \[x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\]</div>
 <p>We want you to write an application developed in  <strong>C</strong> to solve this equation.</p>
-<p>To start you off, we have provided a file <strong>solveQuadratic.c</strong> in <strong>/code/c/ExerciseDay1/</strong> which will read 3 numbers from the command line and print out a message to the screen. You are to modify it to print out the solution for <strong>x</strong>. The contents of this file are shown below.</p>
+<p>To start you off, we have provided a file <strong>solveQuadratic.c</strong> in <strong>/assignments/C-Day1/</strong>. The contents of this file are shown below.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// program to solve quadratic equation</span>
 <span class="linenos"> 2</span><span class="c1">//        ax^2 + bx + c = 0</span>
 <span class="linenos"> 3</span><span class="c1">//</span>
 <span class="linenos"> 4</span><span class="c1">// soln: x = -b/2a +/- sqrt(b^2-4ac)/2a</span>
 <span class="linenos"> 5</span><span class="c1">//</span>
 <span class="linenos"> 6</span><span class="c1">// write a program to take 3 inputs and output the soln</span>
-<span class="linenos"> 7</span><span class="c1">// deal with possible errors in input, i.e. b^2-4ac negative</span>
-<span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
-<span class="linenos">10</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-<span class="linenos">11</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
-<span class="linenos">12</span>
-<span class="linenos">13</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 7</span><span class="c1">// if two real solutions, printf(&quot;%.8f, %.8f\n&quot;, x1, x2);    </span>
+<span class="linenos"> 8</span><span class="c1">// if only one solution, just ouput a single value, i.e. printf(&quot;%.8f\n&quot;, x1);    </span>
+<span class="linenos"> 9</span><span class="c1">// if complex, output a complex number, i.e. printf(&quot;%.8f + %.8fi,%.8f - %.8fi\n&quot;, x1, im, x2,im);    </span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="linenos">12</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="linenos">13</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
 <span class="linenos">14</span>
-<span class="linenos">15</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos">16</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Usage: appName a b c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="linenos">17</span><span class="w">    </span><span class="n">exit</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span>
-<span class="linenos">18</span><span class="w">  </span><span class="p">}</span>
-<span class="linenos">19</span>
-<span class="linenos">20</span><span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atof</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-<span class="linenos">21</span><span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atof</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
-<span class="linenos">22</span><span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atof</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
-<span class="linenos">23</span>
-<span class="linenos">24</span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Have a Nice Day!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="linenos">25</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="linenos">26</span><span class="p">}</span>
+<span class="linenos">15</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">18</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Usage: appName a b c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="linenos">19</span><span class="w">    </span><span class="n">exit</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span>
+<span class="linenos">20</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atof</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="linenos">23</span><span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atof</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+<span class="linenos">24</span><span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atof</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">x1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">x2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="linenos">27</span>
+<span class="linenos">28</span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%.8f, %.8f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">x2</span><span class="p">);</span><span class="w">    </span>
+<span class="linenos">29</span><span class="w">  </span>
+<span class="linenos">30</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">31</span><span class="p">}</span>
+<span class="linenos">32</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -253,28 +258,70 @@
 \[\begin{split}\sigma_x' = \sigma_x \cos^2\theta + \sigma_y \sin^2\theta + 2 \tau_{xy} \sin\theta \cos\theta \\
 \sigma_y' = \sigma_x \sin^2\theta + \sigma_y \cos^2\theta - 2 \tau_{xy} \sin\theta \cos\theta \\
 \tau_{xy}' = ( \sigma_y - \sigma_x ) \sin\theta \cos\theta + \tau_{xy} ( \cos^2\theta - \sin^2\theta )\end{split}\]</div>
-<p><strong>Given state</strong>:</p>
-<div class="math notranslate nohighlight">
-\[\sigma_x = 12~\text{ksi}~, \qquad
-\sigma_y = -5.5~\text{ksi}~, \qquad
-\tau_{xy} = 3.5~\text{ksi}\]</div>
+<p>To start you off, we have provided a file <strong>transformStress.c</strong> in <strong>/assignments/C-Day1/</strong>. You are to modify it to print out the transformed stresses. The contents of this file are shown below.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// program to transform stress:</span>
+<span class="linenos"> 2</span><span class="c1">//</span>
+<span class="linenos"> 3</span><span class="c1">// sigmaX&#39; = sigmaX * cos^2(theta) + sigmaY * sin^2(theta) + 2 * tauXY Sin(theta)Cos(theta)</span>
+<span class="linenos"> 4</span><span class="c1">// sigmaY&#39; = sigmaX * sin^2(theta) + sigmaY * cos^2(theta) - 2 * tauXY Sin(theta)Cos(theta)</span>
+<span class="linenos"> 5</span><span class="c1">// tauXY&#39; = (sigmaY-sigmaX) * sin(theta)cos(theta) + tauXY(cos^2(theta) - sin^2(theta))</span>
+<span class="linenos"> 6</span><span class="c1">//</span>
+<span class="linenos"> 7</span><span class="c1">// write a program to take:</span>
+<span class="linenos"> 8</span><span class="c1">// 1: 4 inputs: sigmaX, sigmaY, tauXY, theta and output transformed stresses: sigmaX&#39;, sigmaY&#39;, tauXY&#39;</span>
+<span class="linenos"> 9</span><span class="c1">// 2: 3  inputs: sigmaX, sigmaY, tauXY and output transformed stresses: sigmaX&#39;, sigmaY&#39;, tauXY&#39; for every 10 degrees</span>
+<span class="linenos">10</span><span class="c1">//</span>
+<span class="linenos">11</span><span class="c1">// NOTE: perform the transformation inside a function that cannot be named main</span>
+<span class="linenos">12</span><span class="c1">//</span>
+<span class="linenos">13</span><span class="c1">// Extend to possibly include all outputs for a Mohr circle, were the theta now provided is a deltaTheta</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="linenos">16</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="linenos">17</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="kt">void</span><span class="w"> </span><span class="nf">transformStress</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="n">stressIN</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">theta</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="n">stressTransformed</span><span class="p">);</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">sigmaX</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">sigmaY</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">tauXY</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%.4f, %.4f, %.4f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sigmaX</span><span class="p">,</span><span class="w"> </span><span class="n">sigmaY</span><span class="p">,</span><span class="w"> </span><span class="n">tauXY</span><span class="p">);</span>
+<span class="linenos">26</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">27</span><span class="p">}</span>
+<span class="linenos">28</span>
+</pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you need something extra work, write to a file the results of this transformation from <strong>0</strong> through <strong>360</strong> degrees in increments you input from the command line.</p>
+<p>If you need something extra work, write to a file the results of this transformation from <strong>0</strong> through <strong>360</strong> degrees in increments of 10</p>
 <blockquote>
 <div><p>To send you data to a file named <strong>results.out</strong>, start the application as follows:</p>
-<p>./appName 1.0 100.0 0.01 1 &gt; results.out</p>
 </div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">appName</span> <span class="mf">1.0</span> <span class="mf">100.0</span> <span class="mf">0.01</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">results</span><span class="o">.</span><span class="n">out</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="problem-3-compute-pi-numerically">
 <h3>Problem 3: Compute PI numerically<a class="headerlink" href="#problem-3-compute-pi-numerically" title="Permalink to this headline">¶</a></h3>
-<p>The figure below shows an method to compute <strong>pi</strong> by numerical integration. We would like you to implement that computation in a <strong>C</strong> program.</p>
+<p>The figure below shows an method to compute <strong>pi</strong> by numerical integration. We would like you to implement that computation in a <strong>C</strong> program. The program should take as input an integer value specyfying the number of intervals.</p>
 <blockquote>
 <div><div class="align-center figure" id="id1">
 <img alt="../_images/pi.png" src="../_images/pi.png" />
 <p class="caption"><span class="caption-text">Computation of pi numerically</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 </div></blockquote>
+<p>To start you off, we have provided a file <strong>transformStress.c</strong> in <strong>/assignments/C-Day1/</strong>. You are to modify it to print out the transformed stresses. The contents of this file are shown below.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">pi</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 8</span><span class="w">  </span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;PI = %16.14f, diff(%16.14f)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">pi</span><span class="p">,</span><span class="w"> </span><span class="n">fabs</span><span class="p">(</span><span class="n">pi</span><span class="o">-</span><span class="n">M_PI</span><span class="p">));</span>
+<span class="linenos">10</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">11</span><span class="p">}</span>
+</pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You will be using your solution on Day 4 as part of the parallel exercises.</p>
