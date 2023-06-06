@@ -32,5 +32,9 @@ int main(int argc, char **argv) {
     }
   }
 
+  FILE *filePtrB = fopen(argv[1],"wb"); 
+
+
   fclose(filePtr);  
+  fclose(filePtrB);  
 }
