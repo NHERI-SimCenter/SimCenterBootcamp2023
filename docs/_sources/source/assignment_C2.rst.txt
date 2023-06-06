@@ -2,37 +2,31 @@ C: Assignments Day 2
 ====================
 
 
-Today we have several problems for you to tackle. 
-Parts should look and feel familiar from Day 1, though we will add more features as we go.
-Those problems are modeled after exercises in Python and, thus, allow you to learn how data structures
-compare when transitioning from python to C (and later C++).
+Today we have several problems for you to tackle. Parts should look and feel familiar from Day 1, though we will add more features as we go.
 
 
 
-Problem 1: Reviewing the stress transformation problem
+Problem 1: DGEMM
 ------------------------------------------------------
-Navigate to **/code/c/ExerciseDay2/ex2-1/** to find another solution for the stress transformation problem.  The main difference to Frank's solution is that this one places functions in separate files, as
-well as adds a header file that contains the definition of the function without its implementation.
-
-Compiling this version requires multiple steps:
+Navigate to **/assignments/C-Day2/matMul**. Instead of a single file, there are multiple files. One of these files, **BlasDGEMM.c**, invokes the BLAS dgemm function and requires that the application be linked to the **BLAS** library. Compiling and linking the applications would require you to find the path to the blas libraries. In addition the multiple .c files would require multiple compilation commands. Compiling this version requires multiple steps:
 
 .. code::
 
-	gcc stresstransform.c -c
-	gcc exercise2-1.c stresstransform.o -lm
+	gcc myDGEMM.c -c
+	gcc blasDGEMM.c -c	
+	gcc matMul.c myDGEMM.o blasDGEMM.o -lm -/pathtoblaslibrary -o matMul
 
 And you can run the executable as
 
 .. code::
 
-	./a.out
+	./matMul
 
 Imagine doing this for many more files, usually tens to hundreds.  That would be painstaking and
 inefficient and very error prone.  Software engineers developed several tools to simplify and automate the compile
 process.  One of those tools is **cmake**, a member of the **make** family of tools.  You find a
 configuration file names **CMakeList.txt** in the source folder. The configuration
 file is a plain text file, so you can and should check out how it is written.
-
 
 The compile process now becomes 
 
@@ -44,6 +38,7 @@ source folder, execute
 	$ mkdir build
 	$ cd build
 	$ cmake ..
+	$ cmake --build .
 
 
 This will check your system for compilers and other development tool and create a **Makefile** in each
@@ -59,15 +54,32 @@ type
 
 .. code::
 
-	$ make
+	$ cmake --build .
 
 to recompile all portions necessary and link all parts to one executable.  That process remains exactly the
 same regardless of the number of files in your project.  Give it a try and see how convenient this is
 especially for projects provided by somebody else.
-	    
 
-	
+Now that you can compile the **matMul** application, you will find it does not work! You are required to fix the **matMul.c** program to allocate memory for the A, B, C and C1 arrays. These arrays are double arrays to hold square, n by n, matrices that are required to be stored in column major order. Some code is required lines 29 through 32. You should also throw in **4** lines ariund line 59.
 
+.. literalinclude:: ./assignments/c2/matMul.c
+   :language: c
+   :linenos:   
+
+After fixing the matMul.c file, you need to edit the **myDGEMM.c** file and place in their code to perform the matrix-matrix operation: C = C + A * B;
+
+.. math:: 
+
+   c_{ij}= c_{ij} + a_{i1} b_{1j} + a_{i2} b_{2j} +\cdots+ a_{in} b_{nj} = c_{ij} + \sum_{k=1}^n a_{ik}b_{kj}
+
+.. literalinclude:: ./assignments/c2/myDGEMM.c
+   :language: c
+   :linenos:   
+
+
+.. note::
+
+   The CMake process created another executabble, **benchmark**. If you run it you will see how your implementation compares in performance against the vendor supplied blas function. It is probably a pretty bad comparison. Try improving the performance. You can play with different compile options, or a revised algorithm, e.g. black matrix-multiply. 
       
    
 Problem 2: Using structures
@@ -85,7 +97,7 @@ write it. Your task in this exercise is to create a structure
 	} STRESS ;
 
 and modify the code from the previous exercise to utilize the much easier to read data structure provided
-by this :code:`struct`.  Use the code skeleton provided in **/code/c/ExerciseDay2/ex2-2** to develop that
+by this :code:`struct`.  Use the code skeleton provided in **/assignments/C_Day2/stressTransformationStruct** to develop that
 code.  The included :code:`CMakeList.txt` shall be used to compile your code.
 
 .. note::
@@ -122,7 +134,8 @@ images using the computed values.  A more efficient way is to use C to do the an
 an easily readable file, and use specialized tools for the post-processing.  One common and simple format
 is **CSV** (comma-separated-values), which van be read easily by MATLAB, python, or Excel.  
 
-**Your task**: modify the code given in **/code/c/ExerciseDay2/ex2-3** to
+
+**Your task**: modify the code given in **/assignments/C-Day2/stressTransformFile/ex2-3/** to
 
 1. Take one argument :math:`\Delta\theta` in degrees after the name of the executable, defining the increment at
 which transformed stress values shall be written:
@@ -174,12 +187,11 @@ Once your code outputs the information, run it once more and save the results to
 Problem 4: Writing to a binary file
 -----------------------------------
 
-
-Modify the code generated in the previous exercise to write a binary file names *mohrcircle.dta* instead
+Modify the code generated in the previous exercise to write a binary file named *mohrcircle.dta* instead
 of the formatted ASCII data.  The data shall be exported in clocks composed of :code:`double theta`
 followed by a block of :code:`STRESS` (or the three components of stress as :code:`double`).
 
-You may be working of your code or use the provided code skeleton in **/code/c/ExerciseDay2/ex2-4**.
+You may be working of your code or use the provided code skeleton in **/assignments/C-Day2/stressTensorFile/ex2-4**.
 
 This time, your code should be totally silent on execution.  The only sign of success will be the creation
 of the data file. For the next steps, run your program with the following parameters:
@@ -241,6 +253,8 @@ Problem 5: Reading From a binary file and Memory Allocation
 
 
 Reading of data from files and placing them into containers such as Vectors is easy if you know the size of the data you are reading. If this is unknown the problem becomes more tricky. The solution presented on slide 22 worked for a small number of inputs, but failed with a segmentation fault for larger problems. You are to fix the problem. A copy of the offending file **file3.c** has been placed in the directory ex2-5 along with two files. The program can handle the first **small.txt**, it will fail with the second **big.txt**. Can you make the program work. The solution will test your understanding of file I/O,  memory management and pointers.
+
+Initial code is provided in the  **/assignments/C-Day2/binaryFile** directory.
 
 The **file3.c** is as shown below. You need to put some code to replace comment at the line 41.
 

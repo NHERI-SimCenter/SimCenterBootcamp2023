@@ -98,7 +98,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="assignments.html">Assignments</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="assignment_C1.html">C: Assignments Day 1</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">C: Assignments Day 2</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#problem-1-reviewing-the-stress-transformation-problem">Problem 1: Reviewing the stress transformation problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#problem-1-dgemm">Problem 1: DGEMM</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#problem-2-using-structures">Problem 2: Using structures</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#problem-3-writing-data-for-use-by-other-programs-csv">Problem 3: Writing data for use by other programs: CSV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#problem-4-writing-to-a-binary-file">Problem 4: Writing to a binary file</a></li>
@@ -193,21 +193,17 @@
             
   <div class="section" id="c-assignments-day-2">
 <h1>C: Assignments Day 2<a class="headerlink" href="#c-assignments-day-2" title="Permalink to this headline">¶</a></h1>
-<p>Today we have several problems for you to tackle.
-Parts should look and feel familiar from Day 1, though we will add more features as we go.
-Those problems are modeled after exercises in Python and, thus, allow you to learn how data structures
-compare when transitioning from python to C (and later C++).</p>
-<div class="section" id="problem-1-reviewing-the-stress-transformation-problem">
-<h2>Problem 1: Reviewing the stress transformation problem<a class="headerlink" href="#problem-1-reviewing-the-stress-transformation-problem" title="Permalink to this headline">¶</a></h2>
-<p>Navigate to <strong>/code/c/ExerciseDay2/ex2-1/</strong> to find another solution for the stress transformation problem.  The main difference to Frank’s solution is that this one places functions in separate files, as
-well as adds a header file that contains the definition of the function without its implementation.</p>
-<p>Compiling this version requires multiple steps:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gcc</span> <span class="n">stresstransform</span><span class="o">.</span><span class="n">c</span> <span class="o">-</span><span class="n">c</span>
-<span class="n">gcc</span> <span class="n">exercise2</span><span class="o">-</span><span class="mf">1.</span><span class="n">c</span> <span class="n">stresstransform</span><span class="o">.</span><span class="n">o</span> <span class="o">-</span><span class="n">lm</span>
+<p>Today we have several problems for you to tackle. Parts should look and feel familiar from Day 1, though we will add more features as we go.</p>
+<div class="section" id="problem-1-dgemm">
+<h2>Problem 1: DGEMM<a class="headerlink" href="#problem-1-dgemm" title="Permalink to this headline">¶</a></h2>
+<p>Navigate to <strong>/assignments/C-Day2/matMul</strong>. Instead of a single file, there are multiple files. One of these files, <strong>BlasDGEMM.c</strong>, invokes the BLAS dgemm function and requires that the application be linked to the <strong>BLAS</strong> library. Compiling and linking the applications would require you to find the path to the blas libraries. In addition the multiple .c files would require multiple compilation commands. Compiling this version requires multiple steps:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gcc</span> <span class="n">myDGEMM</span><span class="o">.</span><span class="n">c</span> <span class="o">-</span><span class="n">c</span>
+<span class="n">gcc</span> <span class="n">blasDGEMM</span><span class="o">.</span><span class="n">c</span> <span class="o">-</span><span class="n">c</span>
+<span class="n">gcc</span> <span class="n">matMul</span><span class="o">.</span><span class="n">c</span> <span class="n">myDGEMM</span><span class="o">.</span><span class="n">o</span> <span class="n">blasDGEMM</span><span class="o">.</span><span class="n">o</span> <span class="o">-</span><span class="n">lm</span> <span class="o">-/</span><span class="n">pathtoblaslibrary</span> <span class="o">-</span><span class="n">o</span> <span class="n">matMul</span>
 </pre></div>
 </div>
 <p>And you can run the executable as</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">a</span><span class="o">.</span><span class="n">out</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">matMul</span>
 </pre></div>
 </div>
 <p>Imagine doing this for many more files, usually tens to hundreds.  That would be painstaking and
@@ -221,6 +217,7 @@ source folder, execute</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir build
 $ cd build
 $ cmake ..
+$ cmake --build .
 </pre></div>
 </div>
 <p>This will check your system for compilers and other development tool and create a <strong>Makefile</strong> in each
@@ -232,12 +229,101 @@ the entire <em>build</em> folder when done.  It can be regenerated easily using 
 </div>
 <p>2. From now on, every time you make changes to any of the files within your project, simply
 type</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cmake --build .
 </pre></div>
 </div>
 <p>to recompile all portions necessary and link all parts to one executable.  That process remains exactly the
 same regardless of the number of files in your project.  Give it a try and see how convenient this is
 especially for projects provided by somebody else.</p>
+<p>Now that you can compile the <strong>matMul</strong> application, you will find it does not work! You are required to fix the <strong>matMul.c</strong> program to allocate memory for the A, B, C and C1 arrays. These arrays are double arrays to hold square, n by n, matrices that are required to be stored in column major order. Some code is required lines 29 through 32. You should also throw in <strong>4</strong> lines ariund line 59.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">extern</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">myDGEMM</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">C</span><span class="p">);</span>
+<span class="linenos"> 6</span><span class="k">extern</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">blasDGEMM</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">);</span>
+<span class="linenos"> 7</span><span class="w">  </span>
+<span class="linenos"> 8</span><span class="kt">void</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="linenos">10</span><span class="w">        </span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">RAND_MAX</span><span class="w"> </span><span class="p">;</span>
+<span class="linenos">11</span><span class="p">}</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="cm">/* The benchmarking program */</span>
+<span class="linenos">14</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">17</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Correct usage: app matrixDimension?</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="linenos">18</span><span class="w">    </span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">19</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">  </span><span class="c1">// get matrix size</span>
+<span class="linenos">22</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="linenos">23</span><span class="w">  </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fabs</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+<span class="linenos">24</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos">25</span><span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">28</span><span class="w">  </span>
+<span class="linenos">29</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">// &lt;&lt; SOME CODE HERE</span>
+<span class="linenos">30</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">// &lt;&lt; SOME CODE HERE</span>
+<span class="linenos">31</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">// &lt;&lt; SOME CODE HERE</span>
+<span class="linenos">32</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">C1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// &lt;&lt; SOME CODE HERE</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">A</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">C1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">35</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;NO MMEORY ALLOCATED FOR ARRAYS</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="linenos">36</span><span class="w">    </span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">37</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">38</span><span class="w">  </span>
+<span class="linenos">39</span><span class="w">  </span><span class="n">fill</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="linenos">40</span><span class="w">  </span><span class="n">fill</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="linenos">41</span><span class="w">  </span><span class="n">fill</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="linenos">42</span><span class="w">    </span>
+<span class="linenos">43</span><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="linenos">44</span><span class="w">    </span><span class="n">C1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="linenos">45</span>
+<span class="linenos">46</span><span class="w">  </span><span class="n">blasDGEMM</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="p">);</span>
+<span class="linenos">47</span><span class="w">    </span>
+<span class="linenos">48</span><span class="w">  </span><span class="n">myDGEMM</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">C1</span><span class="p">);</span>
+<span class="linenos">49</span><span class="w">    </span>
+<span class="linenos">50</span><span class="w">  </span><span class="c1">// check they are the same .. take into account there will be differences due to roundoff</span>
+<span class="linenos">51</span><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="o">*</span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">52</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">C1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">C</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+<span class="linenos">53</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fabs</span><span class="p">(</span><span class="n">diff</span><span class="o">/</span><span class="n">C</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="linenos">54</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1e-10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">55</span><span class="w">      </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos">56</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">57</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span><span class="w">  </span><span class="c1">// GOOD PRACTICE TO PUT 4 LINES of CODE HERE</span>
+<span class="linenos">60</span>
+<span class="linenos">61</span><span class="w">  </span>
+<span class="linenos">62</span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+<span class="linenos">63</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">64</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>After fixing the matMul.c file, you need to edit the <strong>myDGEMM.c</strong> file and place in their code to perform the matrix-matrix operation: C = C + A * B;</p>
+<div class="math notranslate nohighlight">
+\[c_{ij}= c_{ij} + a_{i1} b_{1j} + a_{i2} b_{2j} +\cdots+ a_{in} b_{nj} = c_{ij} + \sum_{k=1}^n a_{ik}b_{kj}\]</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">dgemm_desc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Naive, three-loop dgemm.&quot;</span><span class="p">;</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="cm">/*</span>
+<span class="linenos"> 4</span><span class="cm"> * This routine performs a dgemm operation</span>
+<span class="linenos"> 5</span><span class="cm"> *  C := C + A * B</span>
+<span class="linenos"> 6</span><span class="cm"> * where A, B, and C are lda-by-lda matrices stored in column-major format.</span>
+<span class="linenos"> 7</span><span class="cm"> * On exit, A and B maintain their input values.</span>
+<span class="linenos"> 8</span><span class="cm"> *</span>
+<span class="linenos"> 9</span><span class="cm"> * NOTE: Fortran storage: C(i,j) = C[i + j*n]</span>
+<span class="linenos">10</span><span class="cm"> */</span>
+<span class="linenos">11</span><span class="kt">void</span><span class="w"> </span><span class="nf">myDGEMM</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">C</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">12</span><span class="w">  </span><span class="k">return</span><span class="p">;</span><span class="w"> </span>
+<span class="linenos">13</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The CMake process created another executabble, <strong>benchmark</strong>. If you run it you will see how your implementation compares in performance against the vendor supplied blas function. It is probably a pretty bad comparison. Try improving the performance. You can play with different compile options, or a revised algorithm, e.g. black matrix-multiply.</p>
+</div>
 </div>
 <div class="section" id="problem-2-using-structures">
 <h2>Problem 2: Using structures<a class="headerlink" href="#problem-2-using-structures" title="Permalink to this headline">¶</a></h2>
@@ -251,7 +337,7 @@ write it. Your task in this exercise is to create a structure</p>
 </pre></div>
 </div>
 <p>and modify the code from the previous exercise to utilize the much easier to read data structure provided
-by this <code class="code docutils literal notranslate"><span class="pre">struct</span></code>.  Use the code skeleton provided in <strong>/code/c/ExerciseDay2/ex2-2</strong> to develop that
+by this <code class="code docutils literal notranslate"><span class="pre">struct</span></code>.  Use the code skeleton provided in <strong>/assignments/C_Day2/stressTransformationStruct</strong> to develop that
 code.  The included <code class="code docutils literal notranslate"><span class="pre">CMakeList.txt</span></code> shall be used to compile your code.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -278,7 +364,7 @@ entries in such a structure requires the syntax</p>
 images using the computed values.  A more efficient way is to use C to do the analysis, write results to
 an easily readable file, and use specialized tools for the post-processing.  One common and simple format
 is <strong>CSV</strong> (comma-separated-values), which van be read easily by MATLAB, python, or Excel.</p>
-<p><strong>Your task</strong>: modify the code given in <strong>/code/c/ExerciseDay2/ex2-3</strong> to</p>
+<p><strong>Your task</strong>: modify the code given in <strong>/assignments/C-Day2/stressTransformFile/ex2-3/</strong> to</p>
 <p>1. Take one argument <span class="math notranslate nohighlight">\(\Delta\theta\)</span> in degrees after the name of the executable, defining the increment at
 which transformed stress values shall be written:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ Exercise2-3 5.0
@@ -314,10 +400,10 @@ folder where you placed <strong>list.csv</strong> run</p>
 </div>
 <div class="section" id="problem-4-writing-to-a-binary-file">
 <h2>Problem 4: Writing to a binary file<a class="headerlink" href="#problem-4-writing-to-a-binary-file" title="Permalink to this headline">¶</a></h2>
-<p>Modify the code generated in the previous exercise to write a binary file names <em>mohrcircle.dta</em> instead
+<p>Modify the code generated in the previous exercise to write a binary file named <em>mohrcircle.dta</em> instead
 of the formatted ASCII data.  The data shall be exported in clocks composed of <code class="code docutils literal notranslate"><span class="pre">double</span> <span class="pre">theta</span></code>
 followed by a block of <code class="code docutils literal notranslate"><span class="pre">STRESS</span></code> (or the three components of stress as <code class="code docutils literal notranslate"><span class="pre">double</span></code>).</p>
-<p>You may be working of your code or use the provided code skeleton in <strong>/code/c/ExerciseDay2/ex2-4</strong>.</p>
+<p>You may be working of your code or use the provided code skeleton in <strong>/assignments/C-Day2/stressTensorFile/ex2-4</strong>.</p>
 <p>This time, your code should be totally silent on execution.  The only sign of success will be the creation
 of the data file. For the next steps, run your program with the following parameters:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ Exercise2-4 5.0
@@ -362,6 +448,7 @@ jump pages forward and backward, or move to any specific line.  Press <code clas
 <div class="section" id="problem-5-reading-from-a-binary-file-and-memory-allocation">
 <h2>Problem 5: Reading From a binary file and Memory Allocation<a class="headerlink" href="#problem-5-reading-from-a-binary-file-and-memory-allocation" title="Permalink to this headline">¶</a></h2>
 <p>Reading of data from files and placing them into containers such as Vectors is easy if you know the size of the data you are reading. If this is unknown the problem becomes more tricky. The solution presented on slide 22 worked for a small number of inputs, but failed with a segmentation fault for larger problems. You are to fix the problem. A copy of the offending file <strong>file3.c</strong> has been placed in the directory ex2-5 along with two files. The program can handle the first <strong>small.txt</strong>, it will fail with the second <strong>big.txt</strong>. Can you make the program work. The solution will test your understanding of file I/O,  memory management and pointers.</p>
+<p>Initial code is provided in the  <strong>/assignments/C-Day2/binaryFile</strong> directory.</p>
 <p>The <strong>file3.c</strong> is as shown below. You need to put some code to replace comment at the line 41.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>
 <span class="linenos"> 2</span><span class="cm">/*******************************************************************</span>
