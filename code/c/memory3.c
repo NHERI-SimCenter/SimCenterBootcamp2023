@@ -27,13 +27,13 @@ int main(int argc, char **argv) {
   
   for (int i=0; i<numRows; i++) {
     for (int j=0; j<numCols; j++)
-      matrix1[i+j*numCols] = i;  // matrix1[i][j]=i;
+      matrix1[i*numCols+j] = i;  // matrix1[i][j]=i;
   }
 
   // but above has likely poor cache performance
   for (int j=0; j<numCols; j++)
     for (int i=0; i<numRows; i++) {
-      matrix1[i+j*numCols] = i;  // matrix1[i][j]=i;
+      matrix1[i*numCols+j] = i;  // matrix1[i][j]=i;
   }
 
   // while above has good ordering, below may be faster

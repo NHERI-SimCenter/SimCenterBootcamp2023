@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 
   for (int i=0; i<numRows; i++) {
     for (int j=0; j<numCols; j++)
-      matrix1[i*numCols + j] = matrix[i][j];  
+      matrix1[i + j * numRows] = matrix[i][j];  
   }
 
  // ORIGINAL MATRIX
@@ -42,9 +42,9 @@ int main(int argc, char **argv) {
 
   for (int i=0; i<numRows; i++) {
     for (int j=0; j<numCols; j++)
-      matrix1[i+j*numCols] = matrix[i][j];  // matrix1[i][j]=i;
+      matrix1[i*numCols+j] = matrix[i][j];  // matrix1[i][j]=i;
   }
-  printf("Row Major Order - Version1\n");  
+  printf("Col Major Order - Version1\n");  
   for (int i=0; i<n*n; i++)
     printf("%f ",matrix1[i]);
   printf("\n");
@@ -52,10 +52,10 @@ int main(int argc, char **argv) {
   // but above has likely poor cache performance
   for (int j=0; j<numCols; j++)
     for (int i=0; i<numRows; i++) {
-      matrix1[i+j*numCols] = matrix[i][j];  // matrix1[i][j]=i;
+      matrix1[i*numCols+j] = matrix[i][j];  // matrix1[i][j]=i;
   }
 
-  printf("Row Major Order - Version2\n");    
+  printf("Col Major Order - Version2\n");    
   for (int i=0; i<n*n; i++)
     printf("%f ",matrix1[i]);
   printf("\n");
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
     for (int i=0; i<numRows; i++) {
       *dataPtr++ = matrix[i][j];
   }
-  printf("Row Major Order - Version3\n");  
+  printf("Col Major Order - Version3\n");  
   for (int i=0; i<n*n; i++)
     printf("%f ",matrix1[i]);
   printf("\n");  
