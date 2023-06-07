@@ -7,10 +7,14 @@
 
 int main(int argc, char **argv) {
 
-  if (argc != 2) {
-    fprintf(stdout, "ERROR correct usage appName inputFile\n");
+  if (argc != 3) {
+    fprintf(stdout, "ERROR correct usage appName inputFile outputBinaryFile\n");
     return -1;
   }
+
+  //
+  // read from ascii file
+  //
   
   FILE *filePtr = fopen(argv[1],"r"); 
 
@@ -31,10 +35,16 @@ int main(int argc, char **argv) {
       // some code needed here I think .. programming exercise
     }
   }
+  
+  fclose(filePtr);
 
-  FILE *filePtrB = fopen(argv[1],"wb"); 
-
-
-  fclose(filePtr);  
+  //
+  // write data to binary file
+  //
+  
+  FILE *filePtrB = fopen(argv[2],"wb");
+  
+  // some missing code to write vector1, followed by vector 2
+  
   fclose(filePtrB);  
 }
