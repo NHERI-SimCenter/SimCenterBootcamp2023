@@ -248,13 +248,15 @@ of the data file. For the next steps, run your program with the following parame
 
 
 
-Problem 5: Reading From a binary file and Memory Allocation
------------------------------------------------------------
+Problem 5: Reading From a CSV file, Memory Allocation & Writing to Binary
+-------------------------------------------------------------------------
 
 
-Reading of data from files and placing them into containers such as Vectors is easy if you know the size of the data you are reading. If this is unknown the problem becomes more tricky. The solution presented on slide 22 worked for a small number of inputs, but failed with a segmentation fault for larger problems. You are to fix the problem. A copy of the offending file **file3.c** has been placed in the directory ex2-5 along with two files. The program can handle the first **small.txt**, it will fail with the second **big.txt**. Can you make the program work. The solution will test your understanding of file I/O,  memory management and pointers.
+Reading of data from files and placing them into containers such as Vectors is easy if you know the size of the data you are reading. If this is unknown the problem becomes more tricky. The solution presented on slide 22 worked for a small number of inputs, but failed with a segmentation fault for larger problems. You are to fix the problem. A copy of the offending file **file3.c** has been placed in the directory binaryFile along with two files. The program can handle the first **small.txt**, it will fail with the second **big.txt**. Can you make the program work. The solution will test your understanding of file I/O,  memory management and pointers.
 
 Initial code is provided in the  **/assignments/C-Day2/binaryFile** directory.
+
+At end of the program, you are asked to modify the code so that the results of the two vectors are ouput to a binary file. Output the contents of **vector1** followed by **vector2**.
 
 The **file3.c** is as shown below. You need to put some code to replace comment at the line 41.
 
@@ -269,11 +271,16 @@ The **small.txt** file is as shown below.
 
 .. note::
    
-   No cmake or Makefile has been provided. You can compile the file with icc or whatever compiler you are using. The program takes a single input, the file to read. To compile and test the program, issue the following at the terminal prompt.
+   No cmake or Makefile has been provided. You can compile the file with icc or whatever compiler you are using. The program takes two inputs, the file to read and the file to write. To compile and test the program, issue the following at the terminal prompt. When done compare the file sizes of the binary file to the text file.
 
 
    .. code::
 
       icc file3.c -o file3
       ./file2 small.txt
-      ./file2 big.txt   
+      ./file2 big.txt
+
+
+.. note::
+   
+   Give some thought as to how you would open the file and read back in the two vectors. If you have some time, write a program to do and have that program write the contents of the binary files to a csv file.

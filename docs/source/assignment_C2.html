@@ -102,11 +102,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#problem-2-using-structures">Problem 2: Using structures</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#problem-3-writing-data-for-use-by-other-programs-csv">Problem 3: Writing data for use by other programs: CSV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#problem-4-writing-to-a-binary-file">Problem 4: Writing to a binary file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#problem-5-reading-from-a-binary-file-and-memory-allocation">Problem 5: Reading From a binary file and Memory Allocation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#problem-5-reading-from-a-csv-file-memory-allocation-writing-to-binary">Problem 5: Reading From a CSV file, Memory Allocation &amp; Writing to Binary</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="assignment_C3.html">C: Assignments Day 3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="assignment_C4_solution.html">C: Assignments Day 4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="assignment_C4.html">C: Assignments Day 4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="assignment_C5.html">C: Assignments Day 5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="assignment_day1.html">Python: Assignments Day 1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="assignment_day2.html">Python: Assignments Day 2</a></li>
@@ -445,57 +445,62 @@ and recover the structure of a binary file (though it still requires some practi
 jump pages forward and backward, or move to any specific line.  Press <code class="code docutils literal notranslate"><span class="pre">q</span></code> to exit this utility.</p>
 </div>
 </div>
-<div class="section" id="problem-5-reading-from-a-binary-file-and-memory-allocation">
-<h2>Problem 5: Reading From a binary file and Memory Allocation<a class="headerlink" href="#problem-5-reading-from-a-binary-file-and-memory-allocation" title="Permalink to this headline">¶</a></h2>
-<p>Reading of data from files and placing them into containers such as Vectors is easy if you know the size of the data you are reading. If this is unknown the problem becomes more tricky. The solution presented on slide 22 worked for a small number of inputs, but failed with a segmentation fault for larger problems. You are to fix the problem. A copy of the offending file <strong>file3.c</strong> has been placed in the directory ex2-5 along with two files. The program can handle the first <strong>small.txt</strong>, it will fail with the second <strong>big.txt</strong>. Can you make the program work. The solution will test your understanding of file I/O,  memory management and pointers.</p>
+<div class="section" id="problem-5-reading-from-a-csv-file-memory-allocation-writing-to-binary">
+<h2>Problem 5: Reading From a CSV file, Memory Allocation &amp; Writing to Binary<a class="headerlink" href="#problem-5-reading-from-a-csv-file-memory-allocation-writing-to-binary" title="Permalink to this headline">¶</a></h2>
+<p>Reading of data from files and placing them into containers such as Vectors is easy if you know the size of the data you are reading. If this is unknown the problem becomes more tricky. The solution presented on slide 22 worked for a small number of inputs, but failed with a segmentation fault for larger problems. You are to fix the problem. A copy of the offending file <strong>file3.c</strong> has been placed in the directory binaryFile along with two files. The program can handle the first <strong>small.txt</strong>, it will fail with the second <strong>big.txt</strong>. Can you make the program work. The solution will test your understanding of file I/O,  memory management and pointers.</p>
 <p>Initial code is provided in the  <strong>/assignments/C-Day2/binaryFile</strong> directory.</p>
+<p>At end of the program, you are asked to modify the code so that the results of the two vectors are ouput to a binary file. Output the contents of <strong>vector1</strong> followed by <strong>vector2</strong>.</p>
 <p>The <strong>file3.c</strong> is as shown below. You need to put some code to replace comment at the line 41.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>
-<span class="linenos"> 2</span><span class="cm">/*******************************************************************</span>
-<span class="linenos"> 3</span><span class="cm"> * program to read values from a file, </span>
-<span class="linenos"> 4</span><span class="cm"> * with each line being csv list of int and two double</span>
-<span class="linenos"> 5</span><span class="cm"> *</span>
-<span class="linenos"> 6</span><span class="cm"> * program fails if num lines &gt; 100</span>
-<span class="linenos"> 7</span><span class="cm"> *    Major flaw will cause data to be overwritten outside array </span>
-<span class="linenos"> 8</span><span class="cm"> *    bounds if #lines &gt; 100 &amp; will ultimataly lead to a segmentation fault</span>
-<span class="linenos"> 9</span><span class="cm"> *</span>
-<span class="linenos">10</span><span class="cm"> * Exerise is to fix flaw WITHOUT just setting maxVectorSize incredibly large</span>
-<span class="linenos">11</span><span class="cm"> *</span>
-<span class="linenos">12</span><span class="cm"> * written: fmk</span>
-<span class="linenos">13</span><span class="cm"> ******************************************************************* */</span>
+<span class="linenos"> 2</span><span class="c1">// program to read values from a file, each file a csv list of int and two double</span>
+<span class="linenos"> 3</span><span class="c1">// written: fmk</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="linenos"> 6</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ERROR correct usage appName inputFile outputBinaryFile</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="linenos">12</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="linenos">13</span><span class="w">  </span><span class="p">}</span>
 <span class="linenos">14</span>
-<span class="linenos">15</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-<span class="linenos">16</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
-<span class="linenos">17</span>
-<span class="linenos">18</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos">19</span>
-<span class="linenos">20</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos">21</span><span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ERROR correct usage appName inputFile</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="linenos">22</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
-<span class="linenos">23</span><span class="w">  </span><span class="p">}</span>
-<span class="linenos">24</span><span class="w">  </span>
-<span class="linenos">25</span><span class="w">  </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">filePtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&quot;r&quot;</span><span class="p">);</span><span class="w"> </span>
-<span class="linenos">26</span>
-<span class="linenos">27</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="linenos">28</span><span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">float1</span><span class="p">,</span><span class="w"> </span><span class="n">float2</span><span class="p">;</span>
-<span class="linenos">29</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">maxVectorSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
-<span class="linenos">30</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">vector1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">maxVectorSize</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span>
-<span class="linenos">31</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">vector2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">maxVectorSize</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span><span class="w">  </span>
-<span class="linenos">32</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">vectorSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="linenos">33</span><span class="w">  </span>
-<span class="linenos">34</span><span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">filePtr</span><span class="p">,</span><span class="s">&quot;%d, %f, %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">float1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">float2</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">EOF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos">35</span><span class="w">    </span><span class="n">vector1</span><span class="p">[</span><span class="n">vectorSize</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">float1</span><span class="p">;</span>
-<span class="linenos">36</span><span class="w">    </span><span class="n">vector2</span><span class="p">[</span><span class="n">vectorSize</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">float2</span><span class="p">;</span>
-<span class="linenos">37</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d, %f, %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">vector2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">vector1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-<span class="linenos">38</span><span class="w">    </span><span class="n">vectorSize</span><span class="o">++</span><span class="p">;</span>
-<span class="linenos">39</span>
-<span class="linenos">40</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vectorSize</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">maxVectorSize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="linenos">41</span><span class="w">      </span><span class="cm">/* some code needed here .. programming exercise */</span>
-<span class="linenos">42</span><span class="w">    </span><span class="p">}</span>
-<span class="linenos">43</span><span class="w">  </span><span class="p">}</span>
-<span class="linenos">44</span>
-<span class="linenos">45</span><span class="w">  </span><span class="n">fclose</span><span class="p">(</span><span class="n">filePtr</span><span class="p">);</span><span class="w">  </span>
-<span class="linenos">46</span><span class="p">}</span>
+<span class="linenos">15</span><span class="w">  </span><span class="c1">//</span>
+<span class="linenos">16</span><span class="w">  </span><span class="c1">// read from ascii file</span>
+<span class="linenos">17</span><span class="w">  </span><span class="c1">//</span>
+<span class="linenos">18</span><span class="w">  </span>
+<span class="linenos">19</span><span class="w">  </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">filePtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&quot;r&quot;</span><span class="p">);</span><span class="w"> </span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">22</span><span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">float1</span><span class="p">,</span><span class="w"> </span><span class="n">float2</span><span class="p">;</span>
+<span class="linenos">23</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">maxVectorSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="linenos">24</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">vector1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">maxVectorSize</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span>
+<span class="linenos">25</span><span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">vector2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">maxVectorSize</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span><span class="w">  </span>
+<span class="linenos">26</span><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">vectorSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">27</span><span class="w">  </span>
+<span class="linenos">28</span><span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">filePtr</span><span class="p">,</span><span class="s">&quot;%d, %f, %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">float1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">float2</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">EOF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">29</span><span class="w">    </span><span class="n">vector1</span><span class="p">[</span><span class="n">vectorSize</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">float1</span><span class="p">;</span>
+<span class="linenos">30</span><span class="w">    </span><span class="n">vector2</span><span class="p">[</span><span class="n">vectorSize</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">float2</span><span class="p">;</span>
+<span class="linenos">31</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d, %f, %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">vector2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">vector1</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="linenos">32</span><span class="w">    </span><span class="n">vectorSize</span><span class="o">++</span><span class="p">;</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vectorSize</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">maxVectorSize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">35</span><span class="w">      </span><span class="c1">// some code needed here I think .. programming exercise</span>
+<span class="linenos">36</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">37</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">38</span><span class="w">  </span>
+<span class="linenos">39</span><span class="w">  </span><span class="n">fclose</span><span class="p">(</span><span class="n">filePtr</span><span class="p">);</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="w">  </span><span class="c1">//</span>
+<span class="linenos">42</span><span class="w">  </span><span class="c1">// write data to binary file</span>
+<span class="linenos">43</span><span class="w">  </span><span class="c1">//</span>
+<span class="linenos">44</span><span class="w">  </span>
+<span class="linenos">45</span><span class="w">  </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">filePtrB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="s">&quot;wb&quot;</span><span class="p">);</span>
+<span class="linenos">46</span><span class="w">  </span>
+<span class="linenos">47</span><span class="w">  </span><span class="c1">// some missing code to write vector1, followed by vector 2</span>
+<span class="linenos">48</span><span class="w">  </span>
+<span class="linenos">49</span><span class="w">  </span><span class="n">fclose</span><span class="p">(</span><span class="n">filePtrB</span><span class="p">);</span><span class="w">  </span>
+<span class="linenos">50</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>The <strong>small.txt</strong> file is as shown below.</p>
@@ -513,12 +518,16 @@ jump pages forward and backward, or move to any specific line.  Press <code clas
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>No cmake or Makefile has been provided. You can compile the file with icc or whatever compiler you are using. The program takes a single input, the file to read. To compile and test the program, issue the following at the terminal prompt.</p>
+<p>No cmake or Makefile has been provided. You can compile the file with icc or whatever compiler you are using. The program takes two inputs, the file to read and the file to write. To compile and test the program, issue the following at the terminal prompt. When done compare the file sizes of the binary file to the text file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">icc</span> <span class="n">file3</span><span class="o">.</span><span class="n">c</span> <span class="o">-</span><span class="n">o</span> <span class="n">file3</span>
 <span class="o">./</span><span class="n">file2</span> <span class="n">small</span><span class="o">.</span><span class="n">txt</span>
 <span class="o">./</span><span class="n">file2</span> <span class="n">big</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Give some thought as to how you would open the file and read back in the two vectors. If you have some time, write a program to do and have that program write the contents of the binary files to a csv file.</p>
 </div>
 </div>
 </div>

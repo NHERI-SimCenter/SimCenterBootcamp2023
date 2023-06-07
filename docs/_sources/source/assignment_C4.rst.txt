@@ -1,7 +1,7 @@
 C: Assignments Day 4
 ====================
 
-Today we have two problems for you to tackle. They both parallelize the **pi.c** code you developed for day 1. Both programs will need to be compiled at one of the TACC supercomputers.
+Today we are going to parallelize the **pi.c** code you developed for day 1. to run at TACC you will need to use either **idev** or **sbatch**.
 
 The figure below shows an method to compute **pi** by numerical integration. We would like you to implement that computation in a **C** program.
 
@@ -12,7 +12,7 @@ The figure below shows an method to compute **pi** by numerical integration. We 
            Computation of pi numerically
 
 	   
-The solution `pi.c  <https://github.com/NHERI-SimCenter/SimCenterBootcamp2022/tree/master/code/c/ExerciseDay1/assignments/pi.c>`_ can be found on github. The contents of that file is presented here:
+The solution `pi.c' is in the solitions/C-Day1/pi folder. The contents of that file is presented here:
 
 .. literalinclude:: ./assignments/c4/pi.c
   :language: c
@@ -39,9 +39,9 @@ The solution `pi.c  <https://github.com/NHERI-SimCenter/SimCenterBootcamp2022/tr
      
 .. warning::
 
-   Our solution of **pi.c** as written as a loop dependency which may need to revise for the second problem.
+   Our solution of **pi.c** as written as a loop dependency which may need to revise for tomorrows OpenMPI problem.
    
-Problem 1: Parallelize using **MPI**
+Problem 1: Parallelize **pi.c** using **MPI**
 ------------------------------------
 
 You are to modify the **pi.c** application and run it to use mpi. I have included a few files in code/parallel/ExercisesDay4/ex1 to help you. They include **pi.c** above, gather1.c and a submit.sh script. **gather1.c** was presented in the video, and us shown below:
@@ -56,12 +56,9 @@ The submit script is as shown below.
   :linenos:
 
 
-Problem 2: Parallelize using OpenMP
------------------------------------
+Problem 2: Bonus Parallelize your **matMul** solution using **MPI**
+-------------------------------------------------------------------
 
-You are to modify the **pi.c** application and run it to use mpi. I have included a few files in code/parallel/ExercisesDay4/ex1 to help you. They include **pi.c** above and submitPI.sh script. **submitPI.sh** is as shown:
+If you want a more complicated problem to parallelize, I suggest parallelizing you matMul application from Day 2.
 
-.. literalinclude:: ./solutions/c4/submitPI.sh
-  :linenos:
-
-
+     

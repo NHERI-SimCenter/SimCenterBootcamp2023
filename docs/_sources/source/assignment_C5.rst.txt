@@ -2,6 +2,18 @@
 C: Assignments Day 5
 ====================
 
+Problem 1: Parallelize using OpenMP
+-----------------------------------
+
+You are to modify the **pi.c** application and run it to use mpi. I have included a few files in code/parallel/ExercisesDay4/ex1 to help you. They include **pi.c** above and submitPI.sh script. **submitPI.sh** is as shown:
+
+.. literalinclude:: ./solutions/c4/submitPI.sh
+  :linenos:
+
+
+Problem 2: Additional Exercise JUST for Frank
+---------------------------------------------
+     
 The purpose of these exercises is to set it up so that you are able to run a parallel application on Frontera or Stampede2 by issuing commands in the terminal of your desktop using your DesignSafe account and resources. Time permitting we will share the applications with fellow classmates. The advantage of being able to do this from a terminal is convenience and speed, e.g. you no longer will be required to login and find a token, cd to appropriate directories, edit submit scripts, and so on. Ultimately, as you progress in your careers you will begin to understand, the ability to share your work is one of the really great advantages provided.
 
 There are **5** steps to the exercise today. The steps follow the videos presented for today's class (these are enclosed in hints herein). The exercises are outlined below the **hint**.
