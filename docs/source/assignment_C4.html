@@ -100,7 +100,8 @@
 <li class="toctree-l2"><a class="reference internal" href="assignment_C3.html">C: Assignments Day 3</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">C: Assignments Day 4</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#problem-1-parallelize-pi-c-using-mpi">Problem 1: Parallelize <strong>pi.c</strong> using <strong>MPI</strong></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#problem-2-bonus-parallelize-your-matmul-solution-using-mpi">Problem 2: Bonus Parallelize your <strong>matMul</strong> solution using <strong>MPI</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#problem-2-compute-the-norm-of-a-vector-using-mpi">Problem 2: Compute the Norm of a vector using <strong>MPI</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#problem-3-bonus-parallelize-your-matmul-solution-using-mpi">Problem 3: Bonus Parallelize your <strong>matMul</strong> solution using <strong>MPI</strong></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="assignment_C5.html">C: Assignments Day 5</a></li>
@@ -189,6 +190,8 @@
             
   <div class="section" id="c-assignments-day-4">
 <h1>C: Assignments Day 4<a class="headerlink" href="#c-assignments-day-4" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="problem-1-parallelize-pi-c-using-mpi">
+<h2>Problem 1: Parallelize <strong>pi.c</strong> using <strong>MPI</strong><a class="headerlink" href="#problem-1-parallelize-pi-c-using-mpi" title="Permalink to this headline">¶</a></h2>
 <p>Today we are going to parallelize the <strong>pi.c</strong> code you developed for day 1. to run at TACC you will need to use either <strong>idev</strong> or <strong>sbatch</strong>.</p>
 <p>The figure below shows an method to compute <strong>pi</strong> by numerical integration. We would like you to implement that computation in a <strong>C</strong> program.</p>
 <blockquote>
@@ -246,8 +249,6 @@
 <p class="admonition-title">Warning</p>
 <p>Our solution of <strong>pi.c</strong> as written as a loop dependency which may need to revise for tomorrows OpenMPI problem.</p>
 </div>
-<div class="section" id="problem-1-parallelize-pi-c-using-mpi">
-<h2>Problem 1: Parallelize <strong>pi.c</strong> using <strong>MPI</strong><a class="headerlink" href="#problem-1-parallelize-pi-c-using-mpi" title="Permalink to this headline">¶</a></h2>
 <p>You are to modify the <strong>pi.c</strong> application and run it to use mpi. I have included a few files in code/parallel/ExercisesDay4/ex1 to help you. They include <strong>pi.c</strong> above, gather1.c and a submit.sh script. <strong>gather1.c</strong> was presented in the video, and us shown below:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi.h&gt;</span>
 <span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
@@ -314,8 +315,83 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="problem-2-bonus-parallelize-your-matmul-solution-using-mpi">
-<h2>Problem 2: Bonus Parallelize your <strong>matMul</strong> solution using <strong>MPI</strong><a class="headerlink" href="#problem-2-bonus-parallelize-your-matmul-solution-using-mpi" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="problem-2-compute-the-norm-of-a-vector-using-mpi">
+<h2>Problem 2: Compute the Norm of a vector using <strong>MPI</strong><a class="headerlink" href="#problem-2-compute-the-norm-of-a-vector-using-mpi" title="Permalink to this headline">¶</a></h2>
+<p>Given what you just did with <strong>pi</strong> can you now write a program to compute the norm of  avector. In the <strong>ex2</strong> directory I have placed a file <strong>scatterArray.c</strong>. This file will use MPI_Scatter to send components of the vector to the different processes in the running parallel application.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi.h&gt;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 6</span><span class="w">  </span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">procID</span><span class="p">,</span><span class="w"> </span><span class="n">numP</span><span class="p">;</span>
+<span class="linenos"> 8</span><span class="w">    </span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">globalVector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="linenos">10</span><span class="w">    </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">localVector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">    </span><span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+<span class="linenos">13</span><span class="w">    </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">procID</span><span class="p">);</span>
+<span class="linenos">14</span><span class="w">    </span><span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">numP</span><span class="p">);</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">17</span><span class="w">      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error correct usage: app vectorSize</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="linenos">18</span><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">19</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">20</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">vectorSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="linenos">21</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">remainder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vectorSize</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">numP</span><span class="p">;</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="w">    </span><span class="c1">// Only the root process initializes the global array</span>
+<span class="linenos">24</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">procID</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">25</span><span class="w">      </span><span class="n">globalVector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">vectorSize</span><span class="p">);</span>
+<span class="linenos">26</span><span class="w">      </span><span class="n">srand</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span>
+<span class="linenos">27</span><span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">vectorSize</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">28</span><span class="w">	</span><span class="kt">double</span><span class="w"> </span><span class="n">random_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">RAND_MAX</span><span class="p">;</span>
+<span class="linenos">29</span><span class="w">	</span><span class="n">globalVector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random_number</span><span class="p">;</span>
+<span class="linenos">30</span><span class="w">      </span><span class="p">}</span>
+<span class="linenos">31</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="w">    </span><span class="c1">// Determine the size of the local array for each process</span>
+<span class="linenos">34</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">localSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vectorSize</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">numP</span><span class="p">;</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="w">    </span><span class="c1">// Allocate memory for the local array</span>
+<span class="linenos">37</span><span class="w">    </span><span class="n">localVector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">localSize</span><span class="p">);</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span><span class="w">    </span><span class="c1">// Scatter the global array to all processes</span>
+<span class="linenos">40</span><span class="w">    </span><span class="n">MPI_Scatter</span><span class="p">(</span><span class="n">globalVector</span><span class="p">,</span><span class="w"> </span><span class="n">localSize</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_DOUBLE</span><span class="p">,</span>
+<span class="linenos">41</span><span class="w">                </span><span class="n">localVector</span><span class="p">,</span><span class="w"> </span><span class="n">localSize</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_DOUBLE</span><span class="p">,</span>
+<span class="linenos">42</span><span class="w">                </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">);</span>
+<span class="linenos">43</span>
+<span class="linenos">44</span><span class="w">    </span><span class="c1">// Print the local array for each process</span>
+<span class="linenos">45</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Process %d received: &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">procID</span><span class="p">);</span>
+<span class="linenos">46</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">localSize</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">47</span><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%.2f &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">localVector</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="linenos">48</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">49</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="linenos">50</span>
+<span class="linenos">51</span><span class="w">    </span><span class="c1">// process0 has some stuff in the globalArray that was not sent!</span>
+<span class="linenos">52</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">procID</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">53</span><span class="w">      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Process 0 Additional NOT SENT still in globalVector: &quot;</span><span class="p">);</span><span class="w">    </span>
+<span class="linenos">54</span><span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="n">numP</span><span class="o">*</span><span class="n">localSize</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">vectorSize</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="linenos">55</span><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%.2f &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">globalVector</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="linenos">56</span><span class="w">      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="linenos">57</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span><span class="w">    </span><span class="c1">// Clean up memory</span>
+<span class="linenos">60</span><span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">globalVector</span><span class="p">);</span>
+<span class="linenos">61</span><span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">localVector</span><span class="p">);</span>
+<span class="linenos">62</span>
+<span class="linenos">63</span><span class="w">    </span><span class="n">MPI_Finalize</span><span class="p">();</span>
+<span class="linenos">64</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">65</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The vector size may not always be divisible by the number of processes. In such a case there will be additional terms not sent. Don;t forget to include them in the computation!</p>
+</div>
+</div>
+<div class="section" id="problem-3-bonus-parallelize-your-matmul-solution-using-mpi">
+<h2>Problem 3: Bonus Parallelize your <strong>matMul</strong> solution using <strong>MPI</strong><a class="headerlink" href="#problem-3-bonus-parallelize-your-matmul-solution-using-mpi" title="Permalink to this headline">¶</a></h2>
 <p>If you want a more complicated problem to parallelize, I suggest parallelizing you matMul application from Day 2.</p>
 </div>
 </div>

@@ -1,6 +1,9 @@
 C: Assignments Day 4
 ====================
 
+Problem 1: Parallelize **pi.c** using **MPI**
+---------------------------------------------
+
 Today we are going to parallelize the **pi.c** code you developed for day 1. to run at TACC you will need to use either **idev** or **sbatch**.
 
 The figure below shows an method to compute **pi** by numerical integration. We would like you to implement that computation in a **C** program.
@@ -41,8 +44,6 @@ The solution `pi.c' is in the solitions/C-Day1/pi folder. The contents of that f
 
    Our solution of **pi.c** as written as a loop dependency which may need to revise for tomorrows OpenMPI problem.
    
-Problem 1: Parallelize **pi.c** using **MPI**
-------------------------------------
 
 You are to modify the **pi.c** application and run it to use mpi. I have included a few files in code/parallel/ExercisesDay4/ex1 to help you. They include **pi.c** above, gather1.c and a submit.sh script. **gather1.c** was presented in the video, and us shown below:
 
@@ -56,7 +57,22 @@ The submit script is as shown below.
   :linenos:
 
 
-Problem 2: Bonus Parallelize your **matMul** solution using **MPI**
+Problem 2: Compute the Norm of a vector using **MPI**
+-----------------------------------------------------
+
+Given what you just did with **pi** can you now write a program to compute the norm of  avector. In the **ex2** directory I have placed a file **scatterArray.c**. This file will use MPI_Scatter to send components of the vector to the different processes in the running parallel application.
+
+
+.. literalinclude:: ./assignments/c4/scatterArray.c
+  :language: c		    
+  :linenos:
+     
+.. note::
+
+   The vector size may not always be divisible by the number of processes. In such a case there will be additional terms not sent. Don;t forget to include them in the computation!
+  
+
+Problem 3: Bonus Parallelize your **matMul** solution using **MPI**
 -------------------------------------------------------------------
 
 If you want a more complicated problem to parallelize, I suggest parallelizing you matMul application from Day 2.
