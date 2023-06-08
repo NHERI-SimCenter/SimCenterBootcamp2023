@@ -317,7 +317,7 @@
 </div>
 <div class="section" id="problem-2-compute-the-norm-of-a-vector-using-mpi">
 <h2>Problem 2: Compute the Norm of a vector using <strong>MPI</strong><a class="headerlink" href="#problem-2-compute-the-norm-of-a-vector-using-mpi" title="Permalink to this headline">¶</a></h2>
-<p>Given what you just did with <strong>pi</strong> can you now write a program to compute the norm of  avector. In the <strong>ex2</strong> directory I have placed a file <strong>scatterArray.c</strong>. This file will use MPI_Scatter to send components of the vector to the different processes in the running parallel application.</p>
+<p>Given what you just did with <strong>pi</strong> can you now write a program to compute the norm of a vector. In the <strong>ex2</strong> directory I have placed a file <strong>scatterArray.c</strong>. This file will use MPI_Scatter to send components of the vector to the different processes in the running parallel application.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
 <span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
 <span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi.h&gt;</span>
@@ -387,7 +387,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The vector size may not always be divisible by the number of processes. In such a case there will be additional terms not sent. Don;t forget to include them in the computation!</p>
+<p>The vector size may not always be divisible by the number of processes. In such a case there will be additional terms not sent. Don’t forget to include them in the computation!</p>
 </div>
 </div>
 <div class="section" id="problem-3-bonus-parallelize-your-matmul-solution-using-mpi">

@@ -60,7 +60,7 @@ The submit script is as shown below.
 Problem 2: Compute the Norm of a vector using **MPI**
 -----------------------------------------------------
 
-Given what you just did with **pi** can you now write a program to compute the norm of  avector. In the **ex2** directory I have placed a file **scatterArray.c**. This file will use MPI_Scatter to send components of the vector to the different processes in the running parallel application.
+Given what you just did with **pi** can you now write a program to compute the norm of a vector. In the **ex2** directory I have placed a file **scatterArray.c**. This file will use MPI_Scatter to send components of the vector to the different processes in the running parallel application.
 
 
 .. literalinclude:: ./assignments/c4/scatterArray.c
@@ -69,7 +69,7 @@ Given what you just did with **pi** can you now write a program to compute the n
      
 .. note::
 
-   The vector size may not always be divisible by the number of processes. In such a case there will be additional terms not sent. Don;t forget to include them in the computation!
+   The vector size may not always be divisible by the number of processes. In such a case there will be additional terms not sent. Don't forget to include them in the computation!
   
 
 Problem 3: Bonus Parallelize your **matMul** solution using **MPI**
