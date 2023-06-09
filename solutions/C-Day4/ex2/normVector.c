@@ -34,7 +34,6 @@ int main(int argc, char** argv) {
       for (int i = 0; i < vectorSize; i++) {
 	double random_number = 1.0 + (double)rand() / RAND_MAX;
 	globalVector[i] = random_number;
-	globalVector[i] = i+1;;	
       }
 
       globalData = (double *)malloc(numP*sizeof(double));
