@@ -15,8 +15,6 @@ The figure below shows an method to compute **pi** by numerical integration. We 
            Computation of pi numerically
 
 	   
-The solution `pi.c' is in the solitions/C-Day1/pi folder. The contents of that file is presented here:
-
 .. literalinclude:: ./assignments/c4/pi.c
   :language: c
   :linenos:

@@ -2,16 +2,23 @@
 C: Assignments Day 5
 ====================
 
-Problem 1: Parallelize using OpenMP
------------------------------------
+Problem 1: Parallelize **normVector.c** using **OpenMP**
+--------------------------------------------------------
 
-You are to modify the **pi.c** application and run it to use mpi. I have included a few files in code/parallel/ExercisesDay4/ex1 to help you. They include **pi.c** above and submitPI.sh script. **submitPI.sh** is as shown:
+You are to create a **normVector.c** application to run in parallel using threads and OpenMP. I have included a **normVector.c** and **hello1.c** to help you. **normVector.c** contains no openmp code. **hello1.c** does and it was presented in the videos. They are both in assignments/C-Day5/ex1 directory to help you. 
 
-.. literalinclude:: ./solutions/c4/submitPI.sh
+
+
+Problem 2: Parallelize **pi.c** using **OpenMP**
+------------------------------------------------
+
+You are to modify the **pi.c** application to run in parallel using threads and OpenMP. I have included a **pi.c** in assignments/C-Day5//ex2 directory to help you. 
+
+
+.. literalinclude:: ./assignments/pi.c
   :linenos:
 
-
-Problem 2: Additional Exercise JUST for Frank
+Problem 3: Additional Exercise JUST for Frank
 ---------------------------------------------
      
 The purpose of these exercises is to set it up so that you are able to run a parallel application on Frontera or Stampede2 by issuing commands in the terminal of your desktop using your DesignSafe account and resources. Time permitting we will share the applications with fellow classmates. The advantage of being able to do this from a terminal is convenience and speed, e.g. you no longer will be required to login and find a token, cd to appropriate directories, edit submit scripts, and so on. Ultimately, as you progress in your careers you will begin to understand, the ability to share your work is one of the really great advantages provided.
