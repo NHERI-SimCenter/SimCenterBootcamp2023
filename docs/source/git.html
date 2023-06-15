@@ -100,6 +100,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#using-your-local-repo">Using Your Local Repo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#working-with-your-remote-repo">Working With Your Remote Repo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#synching-your-fork-with-original">Synching your Fork with Original</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-branch-to-work-with-someonelse-s-repo">Creating a Branch to work with Someonelse’s Repo</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="emacs.html">Emacs</a></li>
@@ -514,6 +515,15 @@
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Not really a warning, just something to get your attention. Git has many more commands and features, e.g. branching. We have just presented enough basic commands that will get you through most of what you want to do starting off. As you come across special situations, Dr. Google will prove invaluable!</p>
+</div>
+</div>
+<div class="section" id="creating-a-branch-to-work-with-someonelse-s-repo">
+<h2>Creating a Branch to work with Someonelse’s Repo<a class="headerlink" href="#creating-a-branch-to-work-with-someonelse-s-repo" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">otherFork</span> <span class="n">path</span>
+<span class="n">git</span> <span class="n">fetch</span> <span class="n">otherFork</span>
+<span class="n">git</span> <span class="n">branch</span> <span class="n">newBranch</span> <span class="n">other</span><span class="o">/</span><span class="n">master</span>
+<span class="n">git</span> <span class="n">checkout</span> <span class="n">newBranch</span>
+</pre></div>
 </div>
 </div>
 </div>

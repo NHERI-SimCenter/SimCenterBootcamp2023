@@ -386,3 +386,14 @@ When working in a collaborative project, your interaction with git is as shown i
 
    Not really a warning, just something to get your attention. Git has many more commands and features, e.g. branching. We have just presented enough basic commands that will get you through most of what you want to do starting off. As you come across special situations, Dr. Google will prove invaluable!
 
+
+Creating a Branch to work with Someonelse's Repo
+------------------------------------------------
+
+.. code::
+
+   git remote add otherFork path
+   git fetch otherFork
+   git branch newBranch other/master
+   git checkout newBranch
+   
